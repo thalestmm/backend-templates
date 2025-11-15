@@ -4,11 +4,10 @@ import (
 	"log"
 	"log/slog"
 
+	"go-fiber/core"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/template/html/v2"
-
-	"go-fiber/core"
 )
 
 func main() {
@@ -28,20 +27,15 @@ func InitApp() *fiber.App {
 	log.Println("Environment:", cfg.Environment)
 
 	// Connect to Redis
-	_, err = core.RedisClient()
+	_, err = core.RedisClient() // TODO: Use the Redis client
 	if err != nil {
 		slog.Warn("Failed to connect to redis: " + err.Error())
 	} else {
 		slog.Info("Redis connection established")
 	}
 
-	// Set HTML engine
-	engine := html.New("./views", ".html")
-
 	// Create new Fiber app
-	app := fiber.New(fiber.Config{
-		Views: engine,
-	})
+	app := fiber.New(fiber.Config{})
 
 	// Setup logging
 	app.Use(logger.New())
