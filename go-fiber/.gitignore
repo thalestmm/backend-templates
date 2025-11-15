@@ -1,0 +1,9 @@
+# IDE settings
+.idea/
+
+# Environment
+.env
+.env.local
+
+# Temporary
+tmp/

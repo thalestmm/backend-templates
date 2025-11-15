@@ -1,0 +1,74 @@
+services:
+  broker:
+    image: rabbitmq:4-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: on-failure
+    networks:
+      - public
+      - private
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    restart: on-failure
+    networks:
+      - private
+
+  worker:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - LOG_LEVEL=${LOG_LEVEL:-DEBUG}
+      - BROKER_URL=${BROKER_URL:-amqp://guest:guest@broker:5672/}
+      - BACKEND_URL=${BACKEND_URL:-redis://redis:6379/}
+      - LANGSMITH_PROJECT=${LANGSMITH_PROJECT}
+      - LANGSMITH_API_KEY=${LANGSMITH_API_KEY}
+      - LANGSMITH_TRACING=${LANGSMITH_TRACING}
+    depends_on:
+      - broker
+      - redis
+    restart: always
+    networks:
+      - private
+
+  flower:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command:
+      - uv
+      - run
+      - celery
+      - -A
+      - app.worker.tasks
+      - flower
+    environment:
+      - BROKER_URL=${BROKER_URL:-amqp://guest:guest@broker:5672/}
+      - BACKEND_URL=${BACKEND_URL:-redis://redis:6379/}
+    ports:
+      - "5555:5555"
+    depends_on:
+      - broker
+      - redis
+    restart: on-failure
+    networks:
+      - private
+      - public
+
+
+volumes:
+  redis_data:
+
+networks:
+  public:
+    driver: bridge
+  private:
+    driver: bridge

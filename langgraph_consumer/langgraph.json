@@ -1,0 +1,8 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+    "main": "./app/graphs/main.py:graph"
+  },
+  "env": ".env",
+  "image_distro": "wolfi"
+}

@@ -1,0 +1,23 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Langgraph
+.langgraph_api/
+
+# IDE
+.idea/
+
+# Environment
+.env
+.env.local
+
+# Ruff
+.ruff_cache/

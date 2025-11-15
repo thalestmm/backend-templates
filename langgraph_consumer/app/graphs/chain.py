@@ -1,0 +1,3 @@
+"""
+Sample simple langchain workflow
+"""

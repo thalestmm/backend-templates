@@ -1,0 +1,13 @@
+# Environment
+.venv/
+.env
+.env.local
+
+# IDE Settings
+.idea/
+
+# Ruff
+.ruff_cache/
+
+# Temporary
+tmp/
