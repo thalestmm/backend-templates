@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/template/html/v2"
 )
 
@@ -23,6 +24,9 @@ func InitApp() *fiber.App {
 	app := fiber.New(fiber.Config{
 		Views: engine,
 	})
+
+	// Setup logging
+	app.Use(logger.New())
 
 	// Setup all route endpoints
 	SetupRoutes(app)
