@@ -26,4 +26,9 @@ func SetupRoutes(app *fiber.App) {
 			"title": "API V1",
 		})
 	})
+
+	// 404 to match all other routes
+	app.Use(func(c *fiber.Ctx) error {
+		return c.Render("404", fiber.Map{})
+	})
 }
