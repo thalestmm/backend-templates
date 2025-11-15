@@ -6,6 +6,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/template/html/v2"
+
+	"go-fiber/core"
 )
 
 func main() {
@@ -16,6 +18,13 @@ func main() {
 
 func InitApp() *fiber.App {
 	// Dedicated app initialization for allowing app import for tests
+
+	// Load environment variables
+	cfg, err := core.LoadConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("Environment:", cfg.Environment)
 
 	// Set HTML engine
 	engine := html.New("./views", ".html")
