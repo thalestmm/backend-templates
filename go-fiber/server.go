@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"log/slog"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -25,6 +26,14 @@ func InitApp() *fiber.App {
 		log.Fatal(err)
 	}
 	log.Println("Environment:", cfg.Environment)
+
+	// Connect to Redis
+	_, err = core.RedisClient()
+	if err != nil {
+		slog.Warn("Failed to connect to redis: " + err.Error())
+	} else {
+		slog.Info("Redis connection established")
+	}
 
 	// Set HTML engine
 	engine := html.New("./views", ".html")

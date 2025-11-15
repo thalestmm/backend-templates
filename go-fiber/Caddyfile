@@ -2,6 +2,7 @@
     email thales@email.com
 }
 
+# TODO: Add actual URL
 localhost {
     reverse_proxy backend:3000
 }

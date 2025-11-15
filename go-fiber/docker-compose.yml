@@ -3,9 +3,20 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    environment:
+      - ENVIRONMENT=dev
+      - REDIS_URL=redis://redis:6379
     volumes:
       - ./views:/app/views:z
     restart: always
+    networks:
+      - private
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
     networks:
       - private
 
@@ -22,8 +33,11 @@ services:
     networks:
       - public
       - private
+    depends_on:
+      - backend
 
 volumes:
+  redis_data:
   caddy_data:
   caddy_config:
 
